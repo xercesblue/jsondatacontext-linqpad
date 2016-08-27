@@ -40,6 +40,13 @@ namespace Xamasoft.JsonClassGenerator
 
         public bool GeneratePartialClasses { get; set; }
 
+        public Func<string, string> NameSanitizerCallback { get; set; }
+
+        public JsonClassGenerator()
+        {
+            NameSanitizerCallback = DefaultNameSanitizerCallback;
+        }
+
         public void GenerateClasses()
         {
             if (CodeWriter == null) CodeWriter = new CSharpCodeWriter();
@@ -152,7 +159,7 @@ namespace Xamasoft.JsonClassGenerator
                 {
                     JsonType fieldType;
                     var currentType = new JsonType(this, prop.Value);
-                    var propName = prop.Name;
+                    var propName = NameSanitizerCallback(prop.Name);
                     if (jsonFields.TryGetValue(propName, out fieldType))
                     {
 
@@ -310,6 +317,11 @@ namespace Xamasoft.JsonClassGenerator
         public bool HasSecondaryClasses
         {
             get { return Types.Count > 1; }
+        }
+
+        private string DefaultNameSanitizerCallback(string s)
+        {
+            return s;
         }
 
         public static readonly string[] FileHeader = new[] { 

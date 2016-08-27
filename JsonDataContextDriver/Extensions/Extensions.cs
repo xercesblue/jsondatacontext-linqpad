@@ -27,16 +27,21 @@ namespace JsonDataContextDriver
             }
         }
 
-        public static string SanitiseClassName(this string originalName)
+        internal static string SanitizeName(string originalName)
         {
             var replacers = new[] { "\n", "'", " ", "*", "/", "-", "(", ")", ".", "!", "?", "#", ":", "+", "{", "}", "&", "," };
             var tuples = replacers.Select(r => Tuple.Create(r, "_")).ToList();
 
             var newName = originalName.ReplaceAll(tuples);
-                if (char.IsNumber(newName[0]))
-                    newName = "_" + newName;
+            if (char.IsNumber(newName[0]))
+                newName = "_" + newName;
 
-                return newName;
+            return newName;
+        }
+
+        public static string SanitiseClassName(this string originalName)
+        {
+            return SanitizeName(originalName);
         }
     }
 

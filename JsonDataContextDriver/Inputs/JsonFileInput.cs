@@ -111,7 +111,8 @@ namespace JsonDataContextDriver
                                 OutputStream = outputWriter,
                                 NoHelperClass = true,
                                 UseProperties = true,
-                                GeneratePartialClasses = true
+                                GeneratePartialClasses = true,
+                                NameSanitizerCallback = Extensions.SanitizeName
                             };
 
                             jsg.GenerateClasses();
